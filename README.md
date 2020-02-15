@@ -1,11 +1,17 @@
 # reserva-hospedagem
-web service de reservas e hospedagens com Spring
-## artefatos:
-### arquitetura do banco de dados
+
+web service de reservas e hospedagens com Spring REST e Spring Data JPA
+
+## pré-requisitos:
+
+* o serviço precisa se conectar a um banco de dados existente e configurado via `application.properties`
+  * existe um dump exemplo para o MySQL fornecido na pasta "database"
+
+## arquitetura do banco de dados
 
 <p align="center"><img src="/imagens/0-database.png" alt="modelo de banco de dados"/></p>
 
-### proposta de front-end:
+## interações disponíveis
 #### 1. entrar com as datas para hospedagem e receber os quartos disponíveis no período desejado:
 
 <p align="center"><img src="/imagens/1-buscar-vagas.png" alt="tela" /></p>

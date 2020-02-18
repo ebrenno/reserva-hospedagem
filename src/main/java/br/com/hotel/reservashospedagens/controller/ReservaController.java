@@ -15,7 +15,6 @@ import br.com.hotel.reservashospedagens.model.reserva.ReservaModel;
 import br.com.hotel.reservashospedagens.model.quarto.TipoQuartoNaoExisteException;
 import br.com.hotel.reservashospedagens.persistencia.entidade.ClienteEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.util.Collection;
 import org.apache.commons.logging.Log;
@@ -39,31 +38,28 @@ public class ReservaController {
     @Autowired
     ReservaModel reservaModel;
     @Autowired
-    ObjectMapper om;
-    @Autowired
     Cliente clienteModel;
     @Autowired
     CobrancaModel cobrancaModel;
 
     @GetMapping(path = "/vagas-disponiveis-entre-{checkin}-e-{checkout}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> checarDisponibilidade(
+    public ResponseEntity<Collection<VagaDto>> checarDisponibilidade(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkin,
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkout) throws JsonProcessingException, TipoQuartoNaoExisteException {
+        
         log.info("requisicao para busca de vagas iniciada");
         Collection<VagaDto> vagas = reservaModel.todasVagasRestantes(checkin, checkout);
 
-        String vagasJson = om.writeValueAsString(vagas);
-        return ResponseEntity.ok(vagasJson);
+        return ResponseEntity.ok(vagas);
     }
 
     @PostMapping(path = "/aplicar/{cliente_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity aplicarReserva(@PathVariable int cliente_id, @RequestBody String reservaJson) throws JsonProcessingException, ClienteNaoEncontradoException, TipoQuartoNaoExisteException, NaoHaVagasException {
+    public ResponseEntity aplicarReserva(@PathVariable int cliente_id, @RequestBody ReservaDto reserva) throws JsonProcessingException, ClienteNaoEncontradoException, TipoQuartoNaoExisteException, NaoHaVagasException {
 
-        ReservaDto reservaDto = om.readValue(reservaJson, ReservaDto.class);
         log.info("requisição recebida para o cliente com o id: " + cliente_id);
         ClienteEntity clienteEntity = clienteModel.getEntityPorId(cliente_id);
         log.info("cliente com id[" + cliente_id + "] encontrado");
-        reservaModel.iniciar(clienteEntity, reservaDto.getVagas(), reservaDto.getCheckin(), reservaDto.getCheckout());
+        reservaModel.iniciar(clienteEntity, reserva.getVagas(), reserva.getCheckin(), reserva.getCheckout());
         log.info("reserva concluida para o cliente com o id: " + cliente_id);
         return ResponseEntity.ok().build();
     }

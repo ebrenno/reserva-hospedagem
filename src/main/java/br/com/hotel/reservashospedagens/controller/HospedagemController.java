@@ -21,8 +21,8 @@ import br.com.hotel.reservashospedagens.persistencia.entidade.ReservaEntity;
 import br.com.hotel.reservashospedagens.persistencia.entidade.ServicoEntity;
 import br.com.hotel.reservashospedagens.persistencia.repositorio.ServicoRepositorio;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/hotel/hospedagem")
 public class HospedagemController {
-    
+
     @Autowired
     Cliente clienteModel;
     @Autowired
@@ -51,9 +51,7 @@ public class HospedagemController {
     QuartoModel quartoModel;
     @Autowired
     ServicoRepositorio servicoRepositorio;
-    @Autowired
-    ObjectMapper om;
-    
+
     @PostMapping(path = "/checkin/{reserva_id}/checkout-date/{checkout}")
     public ResponseEntity checkin(@PathVariable int reserva_id, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkout) throws ReservaNaoExisteException, DataForaDoPrazoException {
         ReservaEntity reservaEntity = reservaModel.encontrarPorId(reserva_id);
@@ -63,7 +61,7 @@ public class HospedagemController {
          */
         return ResponseEntity.ok().build();
     }
-    
+
     @PutMapping(path = "/checkout/{hospedagem_id}")
     public ResponseEntity checkout(@PathVariable("hospedagem_id") int hospedagemId) throws HospedagemNaoExisteException {
         HospedagemEntity hospedagem = hospedagemModel.encontrarPorId(hospedagemId);
@@ -73,7 +71,7 @@ public class HospedagemController {
          */
         return ResponseEntity.ok().build();
     }
-    
+
     @PostMapping(path = "/servico/{servico_id}/quarto/{quarto_id}")
     public ResponseEntity pedirServico(@PathVariable("servico_id") int servicoId, @PathVariable("quarto_id") int quartoId) {
         QuartoEntity quartoEntity = quartoModel.encontrarPor(quartoId);
@@ -82,12 +80,11 @@ public class HospedagemController {
         hospedagemModel.incluirServico(hospedagem, servico);
         return ResponseEntity.ok().build();
     }
-    
+
     @GetMapping(path = "/iniciadas/{cliente_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> todasHospedagens(@PathVariable("cliente_id") int clienteId) throws HospedagemNaoExisteException, ClienteNaoEncontradoException, JsonProcessingException {
+    public ResponseEntity<Collection<HospedagemEntity>> todasHospedagens(@PathVariable("cliente_id") int clienteId) throws HospedagemNaoExisteException, ClienteNaoEncontradoException, JsonProcessingException {
         ClienteEntity cliente = clienteModel.getEntityPorId(clienteId);
         List<HospedagemEntity> hospedagens = hospedagemModel.encontrarHospedagensIniciadas(cliente);
-        String response = om.writeValueAsString(hospedagens);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(hospedagens);
     }
 }

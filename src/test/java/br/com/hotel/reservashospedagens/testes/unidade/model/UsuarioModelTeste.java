@@ -9,14 +9,11 @@ import br.com.hotel.reservashospedagens.model.cliente.UsuarioModel;
 import br.com.hotel.reservashospedagens.persistencia.repositorio.UsuarioRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = UsuarioModel.class)
+@SpringJUnitConfig(classes = UsuarioModel.class)
 public class UsuarioModelTeste {
 
     @Autowired

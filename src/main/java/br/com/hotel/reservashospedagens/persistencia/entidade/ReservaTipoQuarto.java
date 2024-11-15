@@ -5,8 +5,8 @@
  */
 package br.com.hotel.reservashospedagens.persistencia.entidade;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 

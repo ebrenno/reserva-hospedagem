@@ -13,14 +13,11 @@ import br.com.hotel.reservashospedagens.persistencia.repositorio.HospedagemRepos
 import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = HospedagemModel.class)
+@SpringJUnitConfig(classes = HospedagemModel.class)
 public class HospedagemModelTeste {
 
     @Autowired

@@ -8,7 +8,7 @@ package br.com.hotel.reservashospedagens.persistencia.entidade;
 import java.io.Serializable;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -17,11 +17,11 @@ import lombok.Getter;
 @Getter
 public class ReservaTipoQuartoId implements Serializable {
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "reserva_id")
     private ReservaEntity reservaId;
-    //@Column(name = "tipo_quarto_id")
-    @OneToOne
+    
+    @ManyToOne
     @JoinColumn(name = "tipo_quarto_id")
     private TipoQuartoEntity tipoQuartoId;
 

@@ -8,7 +8,6 @@ package br.com.hotel.reservashospedagens.model.quarto;
 import br.com.hotel.reservashospedagens.persistencia.entidade.QuartoEntity;
 import br.com.hotel.reservashospedagens.persistencia.entidade.TipoQuartoEntity;
 import br.com.hotel.reservashospedagens.persistencia.repositorio.QuartoRepositorio;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +31,8 @@ public class QuartoModel {
         return container.get();
     }
 
-    public List<QuartoEntity> todosOsQuartos() {
-        List<QuartoEntity> lista = new ArrayList<>();
-        quartoRespositorio.findAll().iterator().forEachRemaining(lista::add);
-        return lista;
+    public List<QuartoEntity> listarTodos() {
+        return quartoRespositorio.findAll();
+        
     }
 }

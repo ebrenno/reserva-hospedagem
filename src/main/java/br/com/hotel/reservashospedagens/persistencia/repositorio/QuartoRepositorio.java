@@ -7,6 +7,7 @@ package br.com.hotel.reservashospedagens.persistencia.repositorio;
 
 import br.com.hotel.reservashospedagens.persistencia.entidade.QuartoEntity;
 import br.com.hotel.reservashospedagens.persistencia.entidade.TipoQuartoEntity;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +15,6 @@ import org.springframework.stereotype.Repository;
 public interface QuartoRepositorio extends CrudRepository<QuartoEntity, Integer> {
 
     public int countAllByTipo(TipoQuartoEntity tipo);
+    @Override
+    public List<QuartoEntity> findAll();
 }

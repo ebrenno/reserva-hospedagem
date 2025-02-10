@@ -103,7 +103,7 @@ public class HospedagemModel {
     }
 
     public List<QuartoEntity> encontrarQuartosLivres() {
-        List<QuartoEntity> todosOsQuartos = quartoModel.todosOsQuartos();
+        List<QuartoEntity> todosOsQuartos = quartoModel.listarTodos();
         List<QuartoEntity> quartosOcupados = this.encontrarQuartosOcupados();
         todosOsQuartos.removeAll(quartosOcupados);
         return todosOsQuartos;

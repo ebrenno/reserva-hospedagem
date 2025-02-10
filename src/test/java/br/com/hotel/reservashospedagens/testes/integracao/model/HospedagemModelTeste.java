@@ -8,6 +8,7 @@ package br.com.hotel.reservashospedagens.testes.integracao.model;
 import br.com.hotel.reservashospedagens.exception.HospedagemNaoExisteException;
 import br.com.hotel.reservashospedagens.model.hospedagem.HospedagemModel;
 import br.com.hotel.reservashospedagens.model.hospedagem.HospedagemStatusEnum;
+import br.com.hotel.reservashospedagens.model.quarto.TipoQuartoEnum;
 import br.com.hotel.reservashospedagens.persistencia.entidade.ClienteEntity;
 import br.com.hotel.reservashospedagens.persistencia.entidade.HospedagemEntity;
 import br.com.hotel.reservashospedagens.persistencia.entidade.QuartoEntity;
@@ -44,7 +45,37 @@ public class HospedagemModelTeste {
     HospedagemModel hospedagemModel;
 
     @Test
-    public void RetornaQuartosLivres() {
+    public void zeroQuartosLivresDevidoNaoExistiremQuartos() {
+        int count = hospedagemModel.encontrarQuartosLivres().size();
+        Assertions.assertEquals(0, count);
+    }
+    @Test
+    public void zeroQuartosLivresDevidoUnicoOcupado() {
+        TipoQuartoEntity solteiro = new TipoQuartoEntity();
+        em.persist(solteiro);
+        QuartoEntity quarto = new QuartoEntity(solteiro, 0, 1);
+        em.persist(quarto);
+        ClienteEntity cliente = new ClienteEntity();
+        em.persist(cliente);
+        LocalDate checkin = LocalDate.now().minusDays(5);
+        LocalDate checkout = LocalDate.now().plusDays(5);
+        HospedagemEntity hospedagem = new HospedagemEntity(cliente, HospedagemStatusEnum.INICIADA, checkin, checkout);
+        hospedagem.incluirQuartos(Arrays.asList(quarto));
+        em.persist(hospedagem);
+        int count = hospedagemModel.encontrarQuartosLivres().size();
+        Assertions.assertEquals(0, count);
+    }
+    @Test
+    public void RetornaUmQuartoLivre() {        
+        TipoQuartoEntity solteiro = new TipoQuartoEntity();
+        em.persist(solteiro);
+        QuartoEntity quarto = new QuartoEntity(solteiro, 0, 0);
+        em.persist(quarto);
+        int count = hospedagemModel.encontrarQuartosLivres().size();
+        Assertions.assertEquals(1, count);
+    }
+    @Test
+    public void doisQuartosLivresEntreQuatroQuartos() {
         TipoQuartoEntity solteiro = new TipoQuartoEntity();
         TipoQuartoEntity casal = new TipoQuartoEntity();
         em.persist(solteiro);
@@ -75,9 +106,9 @@ public class HospedagemModelTeste {
     @Test
     public void EscolheQuartosVagosOrdenadosPorAndar() {
         ReservaEntity reserva = new ReservaEntity();
-        TipoQuartoEntity solteiro = new TipoQuartoEntity();
+        TipoQuartoEntity solteiro = new TipoQuartoEntity("Solteiro", TipoQuartoEnum.SOLTEIRO, 0);
         em.persist(solteiro);
-        TipoQuartoEntity casal = new TipoQuartoEntity();
+        TipoQuartoEntity casal = new TipoQuartoEntity("Casal", TipoQuartoEnum.CASAL, 0);
         em.persist(casal);
         Collection<ReservaTipoQuarto> tiposReservados = Arrays.asList(
                 new ReservaTipoQuarto(new ReservaTipoQuartoId(reserva, solteiro), 2),
@@ -85,7 +116,7 @@ public class HospedagemModelTeste {
         );
         reserva.getQuartosReservados().addAll(tiposReservados);
         em.persist(reserva);
-
+        
         List<QuartoEntity> quartos = Arrays.asList(
                 new QuartoEntity(casal, 0, 3),
                 new QuartoEntity(casal, 0, 1),

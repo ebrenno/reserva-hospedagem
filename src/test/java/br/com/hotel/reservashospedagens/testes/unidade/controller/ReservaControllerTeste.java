@@ -5,6 +5,7 @@
  */
 package br.com.hotel.reservashospedagens.testes.unidade.controller;
 
+import br.com.hotel.reservashospedagens.SpringSecurityConfig;
 import br.com.hotel.reservashospedagens.controller.ReservaController;
 import br.com.hotel.reservashospedagens.dto.reserva.ReservaDto;
 import br.com.hotel.reservashospedagens.exception.ClienteNaoEncontradoException;
@@ -20,6 +21,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,6 +29,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ReservaController.class)
+@Import(SpringSecurityConfig.class)
+
 public class ReservaControllerTeste {
 
     @MockBean
@@ -72,4 +76,5 @@ public class ReservaControllerTeste {
         Mockito.when(clienteModel.getEntityPorId(1)).thenThrow(ClienteNaoEncontradoException.class);
         mvc.perform(post("/hote/reserva/aplicar/1").content(MediaType.APPLICATION_JSON_VALUE).content(content)).andExpect(status().isNotFound());
     }
+        
 }

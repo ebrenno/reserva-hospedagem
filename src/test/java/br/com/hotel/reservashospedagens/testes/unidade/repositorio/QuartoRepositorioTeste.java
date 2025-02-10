@@ -42,4 +42,19 @@ public class QuartoRepositorioTeste {
 
         Assertions.assertTrue(count == 2, "retornou: " + count);
     }
+    @Test
+    public void RetornaNenhumQuarto() {
+        int count = quartoRepositorio.findAll().size();
+        Assertions.assertTrue(count == 0, "retornou: " + count);
+    }
+    @Test
+    public void RetornaUmQuarto() {
+        TipoQuartoEntity solteiro = new TipoQuartoEntity("quarto solteiro", TipoQuartoEnum.SOLTEIRO, 0);
+        solteiro = em.persist(solteiro);
+        QuartoEntity quarto = new QuartoEntity(solteiro, 102, 1);
+        quarto = em.persist(quarto);
+        int count = quartoRepositorio.findAll().size();
+        Assertions.assertTrue(count == 1, "retornou: " + count);
+    }
+    
 }

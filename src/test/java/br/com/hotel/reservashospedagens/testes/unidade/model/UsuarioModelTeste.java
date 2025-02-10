@@ -10,7 +10,7 @@ import br.com.hotel.reservashospedagens.persistencia.repositorio.UsuarioReposito
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 @SpringJUnitConfig(classes = UsuarioModel.class)
@@ -18,7 +18,7 @@ public class UsuarioModelTeste {
 
     @Autowired
     UsuarioModel usuarioModel;
-    @MockBean
+    @MockitoBean
     UsuarioRepositorio usuarioRepositorio;
 
     @Test

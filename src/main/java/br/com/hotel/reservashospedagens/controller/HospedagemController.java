@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +54,7 @@ public class HospedagemController {
     ServicoRepositorio servicoRepositorio;
 
     @PostMapping(path = "/checkin/{reserva_id}/checkout-date/{checkout}")
-    public ResponseEntity checkin(@PathVariable int reserva_id, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkout) throws ReservaNaoExisteException, DataForaDoPrazoException {
+    public ResponseEntity<HttpStatus> checkin(@PathVariable int reserva_id, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkout) throws ReservaNaoExisteException, DataForaDoPrazoException {
         ReservaEntity reservaEntity = reservaModel.encontrarPorId(reserva_id);
         hospedagemModel.checkin(reservaEntity, checkout);
         /*
@@ -63,7 +64,7 @@ public class HospedagemController {
     }
 
     @PutMapping(path = "/checkout/{hospedagem_id}")
-    public ResponseEntity checkout(@PathVariable("hospedagem_id") int hospedagemId) throws HospedagemNaoExisteException {
+    public ResponseEntity<HttpStatus> checkout(@PathVariable("hospedagem_id") int hospedagemId) throws HospedagemNaoExisteException {
         HospedagemEntity hospedagem = hospedagemModel.encontrarPorId(hospedagemId);
         hospedagemModel.checkout(hospedagem);
         /*
@@ -73,7 +74,7 @@ public class HospedagemController {
     }
 
     @PostMapping(path = "/servico/{servico_id}/quarto/{quarto_id}")
-    public ResponseEntity pedirServico(@PathVariable("servico_id") int servicoId, @PathVariable("quarto_id") int quartoId) {
+    public ResponseEntity<HttpStatus> pedirServico(@PathVariable("servico_id") int servicoId, @PathVariable("quarto_id") int quartoId) {
         QuartoEntity quartoEntity = quartoModel.encontrarPor(quartoId);
         HospedagemEntity hospedagem = hospedagemModel.encontrarPorQuarto(quartoEntity);
         ServicoEntity servico = servicoRepositorio.findById(servicoId).get();

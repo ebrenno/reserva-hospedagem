@@ -25,23 +25,23 @@ public class ExceptionController {
     Log log = LogFactory.getLog(ExceptionController.class);
 
     @ExceptionHandler(UsuarioNaoEncontradoException.class)
-    public ResponseEntity usuarioNaoEnontrado() {
+    public ResponseEntity<HttpStatus> usuarioNaoEnontrado() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @ExceptionHandler({ClienteNaoEncontradoException.class, HospedagemNaoExisteException.class, ReservaNaoExisteException.class})
-    public ResponseEntity clienteNaoEncontrado(Exception e) {
+    public ResponseEntity<HttpStatus> clienteNaoEncontrado(Exception e) {
         log.error("conteudo não encontrado", e);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @ExceptionHandler(TipoQuartoNaoExisteException.class)
-    public ResponseEntity recursoRemovido() {
+    public ResponseEntity<HttpStatus> recursoRemovido() {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @ExceptionHandler({DataForaDoPrazoException.class, NaoHaVagasException.class})
-    public ResponseEntity ImpossivelProsseguir() {
+    public ResponseEntity<HttpStatus> ImpossivelProsseguir() {
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 }

@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,7 +55,7 @@ public class ReservaController {
     }
 
     @PostMapping(path = "/aplicar/{cliente_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity aplicarReserva(@PathVariable int cliente_id, @RequestBody ReservaDto reserva) throws JsonProcessingException, ClienteNaoEncontradoException, TipoQuartoNaoExisteException, NaoHaVagasException {
+    public ResponseEntity<HttpStatus> aplicarReserva(@PathVariable int cliente_id, @RequestBody ReservaDto reserva) throws JsonProcessingException, ClienteNaoEncontradoException, TipoQuartoNaoExisteException, NaoHaVagasException {
 
         log.info("requisição recebida para o cliente com o id: " + cliente_id);
         ClienteEntity clienteEntity = clienteModel.getEntityPorId(cliente_id);
